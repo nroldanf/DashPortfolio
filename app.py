@@ -10,6 +10,10 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 server = app.server
 
+port = os.environ.get("PORT")
+port = 8000 if port is None else port
+print(port)
+
 app.layout = html.Div([
     html.H2('Hello World'),
     dcc.Dropdown(
