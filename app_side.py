@@ -56,7 +56,8 @@ SIDEBAR_STYLE = {
     "bottom": 0,
     "width": "16rem",
     "padding": "2rem 1rem",
-    "background-color": "#f8f9fa",
+    "background-color": "black",
+    "color": "white"
 }
     
 button_nav = three_lines_button()
@@ -100,7 +101,7 @@ sidebar = html.Div(
             dbc.Nav(
                 [
                     dbc.NavLink("Face Verification", href="/face-verification", active="exact"),
-                    dbc.NavLink("Voice Verification", href="/page-2", active="exact"),
+                    dbc.NavLink("Voice Verification", href="/voice-verification", active="exact"),
                 ],
                 vertical=True,
                 pills=True,
@@ -123,7 +124,7 @@ simple_sidebar = html.Div(
         dbc.Nav(
             [
                 dbc.NavLink("Face Verification", href="/face-verification", active="exact"),
-                dbc.NavLink("Voice Verification", href="/page-2", active="exact"),
+                dbc.NavLink("Voice Verification", href="/voice-verification", active="exact"),
             ],
             vertical=True,
             pills=False,
@@ -138,17 +139,17 @@ images_component =  dbc.Row(
     [
         dbc.Col(
             html.Div(
-                html.Img(src='data:image/png;base64,{}'.format(encoded_image), style={"width": "100%"}),
-                style={'margin': 50},
-                id="output-data-upload"
+                html.Img(src='data:image/png;base64,{}'.format(encoded_image), className="img"),
+                id="output-data-upload",
+                className="img-div"
             ),
             width=5
         ),
         dbc.Col(
             html.Div(
-                html.Img(src='data:image/png;base64,{}'.format(encoded_image), style={"width": "100%"}),
-                style={'margin': 50},
-                id="output-data-upload-2"
+                html.Img(src='data:image/png;base64,{}'.format(encoded_image), className="img"),
+                id="output-data-upload-2",
+                className="img-div"
             ),
             width=5
         ),
@@ -159,14 +160,14 @@ images_component_cell = dbc.Row([
     dbc.Col(html.Div([
         dbc.Row(
             html.Div(
-                html.Img(src='data:image/png;base64,{}'.format(encoded_image), style={"width": "100%"}),
+                html.Img(src='data:image/png;base64,{}'.format(encoded_image), className="img"),
                 style={'margin': 50},
                 id="output-data-upload-c"
             )
         ),
         dbc.Row(
             html.Div(
-                html.Img(src='data:image/png;base64,{}'.format(encoded_image), style={"width": "100%"}),
+                html.Img(src='data:image/png;base64,{}'.format(encoded_image), className="img"),
                 style={'margin': 50},
                 id="output-data-upload-c-2"
             )
@@ -179,11 +180,12 @@ page_content_face = [
     dbc.Container([
         html.Div([
             dbc.Row([
-                dbc.Col(simple_sidebar, width={"size":2}),
+                dbc.Col(simple_sidebar, width={"size":2}, className="simplesidebar"),
                 dbc.Col([
                     dbc.Row([
                         html.Div([
-                            html.H2('Face Verification API', style={"margin": 20})
+                            html.H2('Face Verification API', style={"margin": 20}),
+                            html.Hr()
                         ], style={"text-align": "center"})
                         
                     ], justify="center"),
@@ -202,12 +204,18 @@ page_content_face = [
                                 'borderStyle': 'dashed',
                                 'borderRadius': '5px',
                                 'textAlign': 'center',
-                                'margin': '10px'
+                                'margin-bottom': '20px'
                             }
                         ),
                     ], justify="center"),
                     images_component,
-                    images_component_cell
+                    images_component_cell,
+                    dbc.Card([
+                        dbc.CardHeader("Similarity Porcentage: {}".format(90), style={"color": "white", "text-align": "center", "font-size": "20px"}, id="similarity-result"),
+                        dbc.CardBody([
+                            dbc.Button("Get Similarity", color="dark", style={"margin-top": "20px", "margin-bottom": "20px"}, block=True)
+                        ]),
+                    ], style={"margin-top": "20px", "margin-bottom": "20px"}, color="secondary")
                 ])
             ])
         ])
@@ -228,7 +236,7 @@ def render_page_content(pathname):
         return html.P("This is the content of the home page!")
     elif pathname == "/face-verification":
         return page_content_face
-    elif pathname == "/page-2":
+    elif pathname == "/voice-verification":
         return html.P("Oh cool, this is page 2!")
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
@@ -253,10 +261,10 @@ def update_output(content):
         # with open("content_callback", "w") as f:
         #     f.write(content)
         # data:tipo;base64
-        children = [html.Img(src=content)]
+        children = [html.Img(src=content, className="img")]
         return children
     else:
-        return [html.Img(src='data:image/png;base64,{}'.format(encoded_image), style={"width": "100%"})]
+        return [html.Img(src='data:image/png;base64,{}'.format(encoded_image), className="img")]
 
 
 @app.callback(

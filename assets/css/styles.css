@@ -1,5 +1,5 @@
 
-@media (min-width: 768px) {
+@media (min-width: 768px){
     .sidebar {
         display: none;
      }
@@ -17,4 +17,14 @@
      .images-component{
          display: none;
      }
+}
+
+.img{
+    width: 100%; object-fit: contain;
+}
+
+.img-div{
+    border:5px #000000 solid;
+    border-radius: 4px;
+    margin: 50;
 }
