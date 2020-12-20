@@ -30,4 +30,4 @@ def display_value(value):
     return 'You have selected "{}"'.format(value)
 
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8000)
+    app.run_server(debug=True, port=port)
