@@ -57,8 +57,8 @@ def display_value(value):
               Input('upload-data', 'contents'))
 def update_output(content, name):
     if content is not None:
-        with open("content_callback", "w") as f:
-            f.write(content)
+        # with open("content_callback", "w") as f:
+        #     f.write(content)
         # data:tipo;base64
         children = [html.Img(src=content)]
         print("aqui")
