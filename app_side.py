@@ -24,8 +24,6 @@ from dash.dependencies import Input, Output, State
 
 app = dash.Dash(
     external_stylesheets=[dbc.themes.BOOTSTRAP],
-    # these meta_tags ensure content is scaled correctly on different devices
-    # see: https://www.w3schools.com/css/css_rwd_viewport.asp for more
     meta_tags=[
         {"name": "viewport", "content": "width=device-width, initial-scale=1"}
     ],
@@ -51,46 +49,17 @@ def three_lines_button():
     ])
     return butt_component
 
+SIDEBAR_STYLE = {
+    "position": "fixed",
+    "top": 0,
+    "left": 0,
+    "bottom": 0,
+    "width": "16rem",
+    "padding": "2rem 1rem",
+    "background-color": "#f8f9fa",
+}
     
 button_nav = three_lines_button()
-
-
-page_content_face = [
-    html.H2('Face Verification API', style={"margin": 20}),
-    dcc.Upload(
-        id="upload-data",
-        children=html.Div([
-            "Drag and Drop or ",
-            html.A("Select Files")
-        ]),
-        style={
-            'width': '100%',
-            'height': '60px',
-            'lineHeight': '60px',
-            'borderWidth': '1px',
-            'borderStyle': 'dashed',
-            'borderRadius': '5px',
-            'textAlign': 'center',
-            'margin': '10px'
-        }
-    ),
-    dbc.Row([
-        dbc.Col(
-            html.Div(
-                html.Img(src='data:image/png;base64,{}'.format(encoded_image)),
-                style={'margin': 50},
-                id="output-data-upload"
-            )
-        ),
-        dbc.Col(
-            html.Div(
-                html.Img(src='data:image/png;base64,{}'.format(encoded_image)),
-                style={'margin': 50},
-                id="output-data-upload-2"
-            )
-        )
-    ])
-]
 
 # we use the Row and Col components to construct the sidebar header
 # it consists of a title, and a toggle, the latter is hidden on large screens
@@ -120,21 +89,13 @@ sidebar_header = dbc.Row(
             align="center",
         )
     ],
-    style={"background-color": "black"}
+    style={"background-color": "black"},
+    className="sidebar"
 )
 
 sidebar = html.Div(
     [
         sidebar_header,
-        # we wrap the horizontal rule and short blurb in a div that can be
-        # hidden on a small screen
-        # html.Div(
-        #     [
-        #         html.Hr(),
-        #     ],
-        #     id="blurb",
-        # ),
-        # use the Collapse component to animate hiding / revealing links
         dbc.Collapse(
             dbc.Nav(
                 [
@@ -148,11 +109,114 @@ sidebar = html.Div(
                     "color": "white"
                 }
             ),
-            id="collapse",
+            id="collapse"
         ),
     ],
-    id="sidebar",
+    id="sidebar"
 )
+
+
+simple_sidebar = html.Div(
+    [
+        html.H2("Menu", className="display-4"),
+        html.Hr(),
+        dbc.Nav(
+            [
+                dbc.NavLink("Face Verification", href="/face-verification", active="exact"),
+                dbc.NavLink("Voice Verification", href="/page-2", active="exact"),
+            ],
+            vertical=True,
+            pills=False,
+        ),
+    ],
+    style=SIDEBAR_STYLE,
+    className="simplesidebar"
+)
+
+
+images_component =  dbc.Row(
+    [
+        dbc.Col(
+            html.Div(
+                html.Img(src='data:image/png;base64,{}'.format(encoded_image), style={"width": "100%"}),
+                style={'margin': 50},
+                id="output-data-upload"
+            ),
+            width=5
+        ),
+        dbc.Col(
+            html.Div(
+                html.Img(src='data:image/png;base64,{}'.format(encoded_image), style={"width": "100%"}),
+                style={'margin': 50},
+                id="output-data-upload-2"
+            ),
+            width=5
+        ),
+    ], justify="center", className="images-component")
+
+
+images_component_cell = dbc.Row([
+    dbc.Col(html.Div([
+        dbc.Row(
+            html.Div(
+                html.Img(src='data:image/png;base64,{}'.format(encoded_image), style={"width": "100%"}),
+                style={'margin': 50},
+                id="output-data-upload-c"
+            )
+        ),
+        dbc.Row(
+            html.Div(
+                html.Img(src='data:image/png;base64,{}'.format(encoded_image), style={"width": "100%"}),
+                style={'margin': 50},
+                id="output-data-upload-c-2"
+            )
+        )
+    ]))
+], justify="center", className="images-component-cell")
+
+
+page_content_face = [
+    dbc.Container([
+        html.Div([
+            dbc.Row([
+                dbc.Col(simple_sidebar, width={"size":2}),
+                dbc.Col([
+                    dbc.Row([
+                        html.Div([
+                            html.H2('Face Verification API', style={"margin": 20})
+                        ], style={"text-align": "center"})
+                        
+                    ], justify="center"),
+                    dbc.Row([
+                        dcc.Upload(
+                            id="upload-data",
+                            children=html.Div([
+                                "Drag and Drop or ",
+                                html.A("Select Files")
+                            ]),
+                            style={
+                                'width': '100%',
+                                'height': '60px',
+                                'lineHeight': '60px',
+                                'borderWidth': '1px',
+                                'borderStyle': 'dashed',
+                                'borderRadius': '5px',
+                                'textAlign': 'center',
+                                'margin': '10px'
+                            }
+                        ),
+                    ], justify="center"),
+                    images_component,
+                    images_component_cell
+                ])
+            ])
+        ])
+    ],
+    fluid=True)
+
+
+
+]
 
 content = html.Div(id="page-content")
 
@@ -191,6 +255,8 @@ def update_output(content):
         # data:tipo;base64
         children = [html.Img(src=content)]
         return children
+    else:
+        return [html.Img(src='data:image/png;base64,{}'.format(encoded_image), style={"width": "100%"})]
 
 
 @app.callback(

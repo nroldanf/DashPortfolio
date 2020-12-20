@@ -1,0 +1,20 @@
+
+@media (min-width: 768px) {
+    .sidebar {
+        display: none;
+     }
+     .images-component-cell{
+        display: none
+     }
+}
+
+
+
+@media (max-width: 768px) {
+    .simplesidebar {
+        display: none;
+     }
+     .images-component{
+         display: none;
+     }
+}
