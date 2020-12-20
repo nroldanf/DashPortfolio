@@ -55,13 +55,12 @@ def display_value(value):
 
 @app.callback(Output('output-data-upload', 'children'),
               Input('upload-data', 'contents'))
-def update_output(content, name):
+def update_output(content):
     if content is not None:
         # with open("content_callback", "w") as f:
         #     f.write(content)
         # data:tipo;base64
         children = [html.Img(src=content)]
-        print("aqui")
         return children
 
 
