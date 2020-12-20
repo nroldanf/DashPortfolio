@@ -9,4 +9,4 @@ RUN pip install -r /requirements.txt
 
 COPY ./ /app
 # Finally, run gunicorn.
-CMD [ "gunicorn", "--workers=5", "--threads=1", "-b 0.0.0.0:$PORT", "app:server"]
+CMD [ "gunicorn", "--workers=5", "--threads=1", "app:server"]
