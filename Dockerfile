@@ -8,7 +8,5 @@ COPY requirements.txt /
 RUN pip install -r /requirements.txt
 
 COPY ./ /app
-EXPOSE 8000
-
 # Finally, run gunicorn.
-CMD [ "gunicorn", "--workers=5", "--threads=1", "-b 0.0.0.0:8000", "app:server"]
+CMD [ "gunicorn", "--workers=5", "--threads=1", "-b 0.0.0.0:$PORT", "app:server"]
