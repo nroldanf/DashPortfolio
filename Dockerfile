@@ -7,6 +7,8 @@ WORKDIR /app
 COPY requirements.txt /
 RUN pip install -r /requirements.txt
 
+#sudo apt install ffmpeg
+
 COPY ./ /app
 # Finally, run gunicorn.
 CMD [ "gunicorn", "--workers=5", "--threads=1", "app:server"]
