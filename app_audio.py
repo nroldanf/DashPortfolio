@@ -4,23 +4,29 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 import librosa
+import librosa.display
 import numpy as np
 import plotly.graph_objects as go
+import matplotlib.pyplot as plt
+import base64
+import io 
+from utils import *
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
+n_fft = 256
+
 audio_file = "assets/voice1.mp3"
-v_signal1, fs1 = librosa.load(audio_file, sr=None)
-t = np.arange(0.0,len(v_signal1)/fs1,(1/fs1))
+t, v_signal1, fs1 = load_audio(audio_file)
+encoded_image1 = stft_save_image(v_signal1, n_fft, fs1, "assets/img1")
 
 fig1 = go.Figure()
 fig1.add_trace(go.Scatter(x=t, y=v_signal1, mode="lines"))
 
-
 audio_file2 = "assets/voice2.mp3"
-v_signal2, fs2 = librosa.load(audio_file2, sr=None)# do not resample the audio
-t = np.arange(0.0,len(v_signal2)/fs2,(1/fs2))
+t, v_signal2, fs2 = load_audio(audio_file)
+encoded_image2 = stft_save_image(v_signal2, n_fft, fs2, "assets/img2")
 
 fig2 = go.Figure()
 fig2.add_trace(go.Scatter(x=t, y=v_signal2, mode="lines"))
@@ -63,7 +69,9 @@ app.layout = html.Div([
     html.Audio(src=audio_file2, controls=True),
     # html.Audio(src=audio_file2, controls=True),
     dcc.Graph(id="audio-1", figure=fig1),
-    dcc.Graph(id="audio-2", figure=fig2)
+    dcc.Graph(id="audio-2", figure=fig2),
+    html.Img(src='data:image/png;base64,{}'.format(encoded_image1), className="img1"),
+    html.Img(src='data:image/png;base64,{}'.format(encoded_image2), className="img2")
 ])
 
 
