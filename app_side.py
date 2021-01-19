@@ -27,6 +27,7 @@ app = dash.Dash(
     meta_tags=[
         {"name": "viewport", "content": "width=device-width, initial-scale=1"}
     ],
+    suppress_callback_exceptions=True
 )
 
 image_filename = 'emanon.jpg' # replace with your own image
@@ -100,8 +101,7 @@ sidebar = html.Div(
         dbc.Collapse(
             dbc.Nav(
                 [
-                    dbc.NavLink("Face Verification", href="/face-verification", active="exact"),
-                    dbc.NavLink("Voice Verification", href="/voice-verification", active="exact"),
+                    dbc.NavLink("Face Verification", href="/face-verification", active="exact")
                 ],
                 vertical=True,
                 pills=True,
@@ -123,8 +123,7 @@ simple_sidebar = html.Div(
         html.Hr(),
         dbc.Nav(
             [
-                dbc.NavLink("Face Verification", href="/face-verification", active="exact"),
-                dbc.NavLink("Voice Verification", href="/voice-verification", active="exact"),
+                dbc.NavLink("Face Verification", href="/face-verification", active="exact")
             ],
             vertical=True,
             pills=False,
@@ -221,9 +220,6 @@ page_content_face = [
         ])
     ],
     fluid=True)
-
-
-
 ]
 
 content = html.Div(id="page-content")
@@ -233,11 +229,9 @@ app.layout = html.Div([dcc.Location(id="url"), sidebar, content])
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
     if pathname == "/":
-        return html.P("This is the content of the home page!")
+        return page_content_face
     elif pathname == "/face-verification":
         return page_content_face
-    elif pathname == "/voice-verification":
-        return html.P("Oh cool, this is page 2!")
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
         [
@@ -248,10 +242,10 @@ def render_page_content(pathname):
     )
 
 
-@app.callback(dash.dependencies.Output('display-value', 'children'),
-              [dash.dependencies.Input('dropdown', 'value')])
-def display_value(value):
-    return 'You have selected "{}"'.format(value)
+# @app.callback(dash.dependencies.Output('display-value', 'children'),
+#               [dash.dependencies.Input('dropdown', 'value')])
+# def display_value(value):
+#     return 'You have selected "{}"'.format(value)
 
 
 @app.callback(Output('output-data-upload', 'children'),
@@ -265,6 +259,7 @@ def update_output(content):
         return children
     else:
         return [html.Img(src='data:image/png;base64,{}'.format(encoded_image), className="img")]
+
 
 
 @app.callback(
