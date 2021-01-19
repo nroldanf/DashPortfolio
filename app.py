@@ -30,6 +30,9 @@ app = dash.Dash(
     suppress_callback_exceptions=True
 )
 
+server = app.server
+
+
 image_filename = 'emanon.jpg' # replace with your own image
 with open(image_filename, 'rb') as f:
     encoded_image = base64.b64encode(f.read()).decode('ascii')
@@ -274,7 +277,7 @@ def toggle_collapse(n, is_open):
 
 
 if __name__ == "__main__":
-    app.run_server(port=8888, debug=True)
+    app.run_server(debug=True)
 # import os
 # import base64
 # from utils import *
